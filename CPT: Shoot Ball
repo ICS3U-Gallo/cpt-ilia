@@ -1,6 +1,6 @@
 import arcade
 import os
-
+import math
 
 WIDTH = 640
 HEIGHT = 480
@@ -23,6 +23,7 @@ aim_x = 320
 aim_y = 250
 aim_right = False
 aim_left = False
+show_aim = True
 
 #Shoot
 shoot_ball = False
@@ -40,10 +41,6 @@ def setup():
     window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
 
-    # net
-    net_x = 100
-    net_y = 100
-
     arcade.run()
 
 
@@ -55,6 +52,7 @@ def update(delta_time):
     global aim_x, aim_y
     global aim_right, aim_right
     global shoot_ball
+    global show_aim
 
     # net movement
     if net_x == 0:
@@ -81,7 +79,16 @@ def update(delta_time):
 
 #Ball Shoot
     if shoot_ball == True:
-        pass
+        '''
+        x_diff = ball_x - aim_x
+        y_diff = ball_y - aim_y
+        angle = math.atan2(y_diff, x_diff)
+        ball_x = math.cos(angle) * 10
+        ball_y = math.sin(angle) * 10
+        '''
+        ball_y += 10
+        
+        show_aim = False
 
 #Aim
 
@@ -95,6 +102,7 @@ def on_draw():
     global net_x, net_y
     global ball_x, ball_y
     global aim_x, aim_y
+    global show_aim
 
     arcade.start_render()
     # Draw in here...
@@ -102,19 +110,23 @@ def on_draw():
 #net
     arcade.draw_circle_filled(net_x, net_y, 50, arcade.color.BLUE)
 #aim
-    arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
+    if show_aim == True:
+            arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
 #ball
     arcade.draw_circle_filled(ball_x, ball_y, 25, arcade.color.ORANGE)
 
 
 def on_key_press(key, modifiers):
     global aim_left, aim_right
+    global shoot_ball
 
     if key == arcade.key.LEFT:
             aim_left = True
     elif key == arcade.key.RIGHT:
             aim_right = True
 
+    if key == arcade.key.SPACE:
+            shoot_ball = True
 
 
 def on_key_release(key, modifiers):
