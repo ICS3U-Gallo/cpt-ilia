@@ -97,7 +97,7 @@ def update(delta_time):
 
         print(ball_x, ball_y)
 
-    if ball_y >= HEIGHT or ball_x == 0 or ball_x == WIDTH:
+    if ball_y >= HEIGHT or ball_x <= 0 or ball_x >= WIDTH:
             ball_x = 320
             ball_y = 150
             aim_x = 320
