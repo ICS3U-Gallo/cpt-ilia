@@ -1,3 +1,4 @@
+
 import arcade
 import os
 import math
@@ -5,34 +6,35 @@ import math
 WIDTH = 640
 HEIGHT = 480
 
-#net
+# net
 net_x = 0
-net_y = HEIGHT * 5/6
+net_y = HEIGHT * 5 / 6
 
 net_right = False
 net_left = False
 net_up = False
 net_down = False
 
-#Ball
+# Ball
 ball_x = 320
 ball_y = 150
+ball_speed = 5
 
-#Aim
+# Aim
 aim_x = 320
 aim_y = 250
 aim_right = False
 aim_left = False
 show_aim = True
 
-#Shoot
+# Shoot
 shoot_ball = False
-
+ball_move = False
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "My Arcade Game")
     arcade.set_background_color(arcade.color.WHITE)
-    arcade.schedule(update, 1/60)
+    arcade.schedule(update, 1 / 60)
 
     # Override arcade window methods
     window = arcade.get_window()
@@ -53,50 +55,59 @@ def update(delta_time):
     global aim_right, aim_right
     global shoot_ball
     global show_aim
+    global ball_speed
 
     # net movement
     if net_x == 0:
-            net_right = True
-            net_left = False
-            net_down = False
-            net_up = False
+        net_right = True
+        net_left = False
+        net_down = False
+        net_up = False
     elif net_x == WIDTH:
-            net_right = False
-            net_left = True
-            net_down = False
-            net_up = False
-
+        net_right = False
+        net_left = True
+        net_down = False
+        net_up = False
 
     if net_right == True:
-            net_x += 10
-    elif net_left ==  True:
-            net_x -= 10
+        net_x += 10
+    elif net_left == True:
+        net_x -= 10
 
     if net_down == True:
-            net_y -= 10
+        net_y -= 10
     elif net_up == True:
         net_y += 10
 
-#Ball Shoot
+    # Ball Shoot
     if shoot_ball == True:
-        '''
-        x_diff = ball_x - aim_x
-        y_diff = ball_y - aim_y
+        x_diff = aim_x - ball_x
+        y_diff = aim_y - ball_y
         angle = math.atan2(y_diff, x_diff)
-        ball_x = math.cos(angle) * 10
-        ball_y = math.sin(angle) * 10
-        '''
-        ball_y += 10
-        
+
+        ball_change_x = math.cos(angle) * ball_speed
+        ball_change_y = math.sin(angle) * ball_speed
+
+        ball_y += ball_change_y
+        ball_x += ball_change_x
+
         show_aim = False
 
-#Aim
-
+    if ball_y == HEIGHT or ball_y == 0 or ball_x == 0 or ball_x == WIDTH:
+            ball_x = 320
+            ball_y = 150
+            shoot_ball = False
+            show_aim = True
+    # Aim
     if aim_left == True:
-            aim_x -= 5
+        aim_x -= 5
     elif aim_right == True:
-            aim_x += 5
+        aim_x += 5
 
+    if aim_x == WIDTH:
+            aim_x = WIDTH - 5
+    if aim_x == 0:
+            aim_x = 0 + 5
 
 def on_draw():
     global net_x, net_y
@@ -107,12 +118,12 @@ def on_draw():
     arcade.start_render()
     # Draw in here...
 
-#net
+    # net
     arcade.draw_circle_filled(net_x, net_y, 50, arcade.color.BLUE)
-#aim
+    # aim
     if show_aim == True:
-            arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
-#ball
+        arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
+    # ball
     arcade.draw_circle_filled(ball_x, ball_y, 25, arcade.color.ORANGE)
 
 
@@ -121,21 +132,22 @@ def on_key_press(key, modifiers):
     global shoot_ball
 
     if key == arcade.key.LEFT:
-            aim_left = True
+        aim_left = True
     elif key == arcade.key.RIGHT:
-            aim_right = True
+        aim_right = True
 
     if key == arcade.key.SPACE:
-            shoot_ball = True
+        shoot_ball = True
 
 
 def on_key_release(key, modifiers):
     global aim_left, aim_right
 
     if key == arcade.key.LEFT:
-            aim_left = False
+        aim_left = False
     if key == arcade.key.RIGHT:
-            aim_right = False
+        aim_right = False
+
 
 def on_mouse_press(x, y, button, modifiers):
     pass
