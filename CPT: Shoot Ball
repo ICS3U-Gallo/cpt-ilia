@@ -95,9 +95,13 @@ def update(delta_time):
 
         show_aim = False
 
-    if ball_y == HEIGHT or ball_y == 0 or ball_x == 0 or ball_x == WIDTH:
+        print(ball_x, ball_y)
+
+    if ball_y >= HEIGHT or ball_x == 0 or ball_x == WIDTH:
             ball_x = 320
             ball_y = 150
+            aim_x = 320
+            aim_y = 250
             shoot_ball = False
             show_aim = True
     # Aim
