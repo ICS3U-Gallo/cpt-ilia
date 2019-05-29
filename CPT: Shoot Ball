@@ -8,6 +8,7 @@ HEIGHT = 480
 # net
 #      x,        y      ,  r
 net = [0, HEIGHT * 5 / 6, 50]
+net_speed = 10
 
 net_right = False
 net_left = False
@@ -66,28 +67,32 @@ def update(delta_time):
     global health
     global score
     global ball_reset
+    global net_speed
 
     # net movement
-    if net[0] == 0:
+    if net[0] <= 0:
         net_right = True
         net_left = False
         net_down = False
         net_up = False
-    elif net[0] == WIDTH:
+        speed_increase = False
+
+    elif net[0] >= WIDTH:
         net_right = False
         net_left = True
         net_down = False
         net_up = False
+        speed_increase = False
 
     if net_right == True:
-        net[0] += 10
+        net[0] += net_speed
     elif net_left == True:
-        net[0] -= 10
+        net[0] -= net_speed
 
     if net_down == True:
-        net[2] -= 10
+        net[2] -= net_speed
     elif net_up == True:
-        net[2] += 10
+        net[2] += net_speed
 
     # Ball Shoot
     if shoot_ball == True:
@@ -126,6 +131,7 @@ def update(delta_time):
 
     if health == 0:
             print('YOU DIED LOSER!!!')
+            arcade.close_window()
 
     if ball_reset == True:
         ball[0] = 320
@@ -146,12 +152,14 @@ def update(delta_time):
         ball_reset = True
         '''
         collision = 'yes'
-
+        
     if collision == 'yes':
         '''
         score += 1
+        net_speed += 1
 
         print(f"Score: {score}")
+
 
 
 def on_draw():
@@ -177,6 +185,11 @@ def on_draw():
     for num in range(health):
         for x in range(health * 25, 24, -25):
             arcade.draw_xywh_rectangle_filled(x, 64, 20, 20, arcade.color.RADICAL_RED)
+
+    # Score
+
+    arcade.draw_text(f"Score: {score}", WIDTH - 80, 64, arcade.color.BLACK)
+
 
 
 def on_key_press(key, modifiers):
