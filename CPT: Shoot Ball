@@ -31,11 +31,11 @@ show_aim = True
 shoot_ball = False
 ball_move = False
 
-#Score
+# Score
 score = 0
 collision = "No"
 
-#Health
+# Health
 health = 5
 
 def setup():
@@ -106,7 +106,6 @@ def update(delta_time):
 
         show_aim = False
 
-
     # Aim
     if aim_left == True:
         aim_x -= 5
@@ -119,7 +118,7 @@ def update(delta_time):
     if aim_x in range(0, 60):
             aim_x = 60
 
-    #Boundaries and Health
+    # Boundaries and Health
     if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
             health -= 1
             ball_reset = True
@@ -136,7 +135,8 @@ def update(delta_time):
         shoot_ball = False
         show_aim = True
         ball_reset = False
-    #Score Keeping
+
+    # Score Keeping
 
     dist_x = ball[0] - net[0]
     dist_y = ball[1] - net[1]
@@ -165,11 +165,18 @@ def on_draw():
 
     # net
     arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
+
     # aim
     if show_aim == True:
         arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
+
     # ball
     arcade.draw_circle_filled(ball[0], ball[1], ball[2], arcade.color.ORANGE)
+
+    # Health
+    for num in range(health):
+        for x in range(health * 25, 24, -25):
+            arcade.draw_xywh_rectangle_filled(x, 64, 20, 20, arcade.color.RADICAL_RED)
 
 
 def on_key_press(key, modifiers):
@@ -195,7 +202,7 @@ def on_key_release(key, modifiers):
 
 
 def on_mouse_press(x, y, button, modifiers):
-    pass
+    print(x, y)
 
 
 if __name__ == '__main__':
