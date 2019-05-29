@@ -151,7 +151,7 @@ def update(delta_time):
         '''
         score += 1
 
-    print(f"Score: {score}")
+        print(f"Score: {score}")
 
 
 def on_draw():
