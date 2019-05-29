@@ -6,8 +6,8 @@ WIDTH = 640
 HEIGHT = 480
 
 # net
-net_x = 0
-net_y = HEIGHT * 5 / 6
+#      x,        y      ,  r
+net = [0, HEIGHT * 5 / 6, 50]
 
 net_right = False
 net_left = False
@@ -15,9 +15,10 @@ net_up = False
 net_down = False
 
 # Ball
-ball_x = 320
-ball_y = 150
+#        x    y   r
+ball = [320, 150, 25]
 ball_speed = 10
+ball_reset = False
 
 # Aim
 aim_x = 320
@@ -30,8 +31,15 @@ show_aim = True
 shoot_ball = False
 ball_move = False
 
+#Score
+score = 0
+collision = "No"
+
+#Health
+health = 5
+
 def setup():
-    arcade.open_window(WIDTH, HEIGHT, "My Arcade Game")
+    arcade.open_window(WIDTH, HEIGHT, "Hoops")
     arcade.set_background_color(arcade.color.WHITE)
     arcade.schedule(update, 1 / 60)
 
@@ -48,76 +56,107 @@ def setup():
 def update(delta_time):
     global WIDTH, HEIGHT
     global net_right, net_left, net_up, net_down
-    global net_y, net_x
-    global ball_x, ball_y
+    global net
+    global ball
     global aim_x, aim_y
     global aim_right, aim_right
     global shoot_ball
     global show_aim
     global ball_speed
+    global health
+    global score
+    global ball_reset
 
     # net movement
-    if net_x == 0:
+    if net[0] == 0:
         net_right = True
         net_left = False
         net_down = False
         net_up = False
-    elif net_x == WIDTH:
+    elif net[0] == WIDTH:
         net_right = False
         net_left = True
         net_down = False
         net_up = False
 
     if net_right == True:
-        net_x += 10
+        net[0] += 10
     elif net_left == True:
-        net_x -= 10
+        net[0] -= 10
 
     if net_down == True:
-        net_y -= 10
+        net[2] -= 10
     elif net_up == True:
-        net_y += 10
+        net[2] += 10
 
     # Ball Shoot
     if shoot_ball == True:
-        x_diff = aim_x - ball_x
-        y_diff = aim_y - ball_y
+        x_diff = aim_x - ball[0]
+        y_diff = aim_y - ball[1]
         angle = math.atan2(y_diff, x_diff)
 
         ball_change_x = math.cos(angle) * ball_speed
         ball_change_y = math.sin(angle) * ball_speed
 
-        ball_y += ball_change_y
-        ball_x += ball_change_x
+        ball[1] += ball_change_y
+        ball[0] += ball_change_x
 
         aim_y += ball_change_y
         aim_x += ball_change_x
 
         show_aim = False
 
-        print(ball_x, ball_y)
 
-    if ball_y >= HEIGHT or ball_x <= 0 or ball_x >= WIDTH:
-            ball_x = 320
-            ball_y = 150
-            aim_x = 320
-            aim_y = 250
-            shoot_ball = False
-            show_aim = True
     # Aim
     if aim_left == True:
         aim_x -= 5
     elif aim_right == True:
         aim_x += 5
 
-    if aim_x == WIDTH:
-            aim_x = WIDTH - 5
-    if aim_x == 0:
-            aim_x = 0 + 5
+
+    if aim_x in range(WIDTH - 60, WIDTH + 1):
+            aim_x = WIDTH - 60
+    if aim_x in range(0, 60):
+            aim_x = 60
+
+    #Boundaries and Health
+    if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
+            health -= 1
+            ball_reset = True
+            print(f"Health: {health}")
+
+    if health == 0:
+            print('YOU DIED LOSER!!!')
+
+    if ball_reset == True:
+        ball[0] = 320
+        ball[1] = 150
+        aim_x = 320
+        aim_y = 250
+        shoot_ball = False
+        show_aim = True
+        ball_reset = False
+    #Score Keeping
+
+    dist_x = ball[0] - net[0]
+    dist_y = ball[1] - net[1]
+    dist = math.sqrt(dist_x**2 + dist_y**2)
+
+    if dist < (ball[2]+ net[2] - 10):
+        ball_reset = True
+        '''
+        collision = 'yes'
+
+    if collision == 'yes':
+        '''
+        score += 1
+
+    print(f"Score: {score}")
+
 
 def on_draw():
-    global net_x, net_y
-    global ball_x, ball_y
+    global net
+    global ball
     global aim_x, aim_y
     global show_aim
 
@@ -125,12 +164,12 @@ def on_draw():
     # Draw in here...
 
     # net
-    arcade.draw_circle_filled(net_x, net_y, 50, arcade.color.BLUE)
+    arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
     # aim
     if show_aim == True:
         arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
     # ball
-    arcade.draw_circle_filled(ball_x, ball_y, 25, arcade.color.ORANGE)
+    arcade.draw_circle_filled(ball[0], ball[1], ball[2], arcade.color.ORANGE)
 
 
 def on_key_press(key, modifiers):
