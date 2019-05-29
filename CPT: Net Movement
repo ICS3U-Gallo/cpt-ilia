@@ -26,9 +26,6 @@ def setup():
     window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
 
-    # net
-    net_x = 100
-    net_y = 100
 
     arcade.run()
 
@@ -45,22 +42,22 @@ def update(delta_time):
 
 
     # net_x
-    if net_x == 0 and net_y != 1/2:
+    if net_x <= 0 and net_y != 1/2:
             net_right = True
             net_left = False
             net_down = False
             net_up = False
-    elif net_x == WIDTH and net_y == HEIGHT * 5/6:
+    elif net_x >= WIDTH and net_y >= HEIGHT * 5/6:
             net_right = False
             net_left = False
             net_down = True
             net_up = False
-    elif net_x == WIDTH and net_y == HEIGHT * 1/2:
+    elif net_x == WIDTH and net_y <= HEIGHT * 1/2:
             net_right = False
             net_left = True
             net_down = False
             net_up = False
-    elif net_x == 0 and net_y == HEIGHT * 1/2:
+    elif net_x <= 0 and net_y <= HEIGHT * 1/2:
             net_right = False
             net_left = False
             net_down = False
@@ -68,12 +65,12 @@ def update(delta_time):
 
 
     if net_right == True:
-            net_x += 10
+        net_x += 10
     elif net_left ==  True:
-            net_x -= 10
+        net_x -= 10
 
     if net_down == True:
-            net_y -= 10
+        net_y -= 10
     elif net_up == True:
         net_y += 10
 
