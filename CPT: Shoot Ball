@@ -183,7 +183,7 @@ def on_draw():
 
     if current_screen == "Death":
 
-        arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 50)
+        arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 20)
         arcade.set_background_color(arcade.color.RED_DEVIL)
 
     if current_screen == "Menu":
