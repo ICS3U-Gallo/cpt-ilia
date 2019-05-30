@@ -44,6 +44,7 @@ ball_move = False
 
 # Score
 score = 0
+final_score = 0
 collision = "No"
 score_list = [0, 0, 0, 0, 0]
 
@@ -74,7 +75,7 @@ def update(delta_time):
     global net, net_right, net_left, net_up, net_down, net_speed, net_reset
     global ball, shoot_ball, ball_speed, ball_reset
     global aim_x, aim_y, aim_right, aim_left, show_aim
-    global health, score
+    global health, score, final_score
     global current_screen
 
     # net movement
@@ -139,6 +140,7 @@ def update(delta_time):
     if health == 0:
         print('YOU DIED !!!')
         current_screen = "Death"
+        final_score = score
         score = 0
         net_reset = True
         ball_reset = True
@@ -163,7 +165,7 @@ def update(delta_time):
         net_reset = True
         health = 5
         score = 0
-        
+
     # Score Keeping
 
     dist_x = ball[0] - net[0]
@@ -187,6 +189,7 @@ def on_draw():
     global aim_x, aim_y, show_aim
     global current_screen
     global play, instructions, highscores
+    global final_score
 
 
     arcade.start_render()
@@ -196,6 +199,8 @@ def on_draw():
 
         arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 20)
         arcade.set_background_color(arcade.color.RED_DEVIL)
+
+        arcade.draw_text(f"Final Score: {final_score}", WIDTH/2 - 80, HEIGHT/2 - 50, arcade.color.BLACK)
 
     if current_screen == "Menu":
 
@@ -280,8 +285,8 @@ def on_mouse_press(x, y, button, modifiers):
 
     if x > play[0] and x < play[0]+play[2] and y > play[1] and y < play[1]+play[3]:
         current_screen = "Play"
-        
-    
+
+
 
 if __name__ == '__main__':
     setup()
