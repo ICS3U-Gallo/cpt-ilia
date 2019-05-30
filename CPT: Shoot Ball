@@ -73,14 +73,14 @@ def update(delta_time):
         net_left = False
         net_down = False
         net_up = False
-        speed_increase = False
+
 
     elif net[0] >= WIDTH:
         net_right = False
         net_left = True
         net_down = False
         net_up = False
-        speed_increase = False
+
 
     if net_right == True:
         net[0] += net_speed
@@ -148,6 +148,12 @@ def update(delta_time):
         net_speed = 0
         net_reset = False
 
+    if current_screen == "Menu":
+        ball_reset = True
+        net_reset = True
+        health = 5
+        score = 0
+
     # Score Keeping
 
     dist_x = ball[0] - net[0]
@@ -177,17 +183,28 @@ def on_draw():
 
     if current_screen == "Death":
 
-        arcade.draw_text("You Died!!! (Press M to go to menu)", 150, HEIGHT/2, arcade.color.BLACK, 20)
+        arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 100)
+        arcade.set_background_color(arcade.color.RED_DEVIL)
 
     if current_screen == "Menu":
 
-        arcade.draw_text("Menu", WIDTH/2, HEIGHT* 2/3, arcade.color.BLACK)
+        arcade.set_background_color(arcade.color.WHITE)
 
+        arcade.draw_text("Hoops", 270, HEIGHT * 2/3, arcade.color.BLACK, 20, italic=True)
+
+        #Play Button
+        arcade.draw_xywh_rectangle_filled(175, 210, 125, 50, arcade.color.ORANGE)
+        arcade.draw_text("Play", 215, 230, arcade.color.BLACK, 15)
+
+        #Instructions Button
+        arcade.draw_xywh_rectangle_filled(325, 210, 125, 50, arcade.color.ORANGE)
+        arcade.draw_text("Instructions", 330, 230, arcade.color.BLACK, 15)
 
 
     if current_screen == "Play":
         # background
 
+        arcade.set_background_color(arcade.color.WHITE)
 
         # net
         arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
@@ -216,12 +233,12 @@ def on_key_press(key, modifiers):
     global shoot_ball
     global current_screen
 
-    if key == arcade.key.LEFT:
+    if key == arcade.key.LEFT and current_screen == "Play":
         aim_left = True
-    elif key == arcade.key.RIGHT:
+    elif key == arcade.key.RIGHT and current_screen == "Play":
         aim_right = True
 
-    if key == arcade.key.SPACE:
+    if key == arcade.key.SPACE and current_screen == "Play":
         shoot_ball = True
 
     if key == arcade.key.P:
