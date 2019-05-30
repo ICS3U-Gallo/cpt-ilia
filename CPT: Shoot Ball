@@ -1,6 +1,7 @@
+
 import arcade
-import os
 import math
+
 
 WIDTH = 640
 HEIGHT = 480
@@ -39,6 +40,10 @@ collision = "No"
 # Health
 health = 5
 
+# Screen
+
+current_screen = "Menu"
+
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "Hoops")
     arcade.set_background_color(arcade.color.WHITE)
@@ -68,6 +73,7 @@ def update(delta_time):
     global score
     global ball_reset
     global net_speed
+    global current_screen
 
     # net movement
     if net[0] <= 0:
@@ -117,21 +123,22 @@ def update(delta_time):
     elif aim_right == True:
         aim_x += 5
 
-
     if aim_x in range(WIDTH - 60, WIDTH + 1):
-            aim_x = WIDTH - 60
+        aim_x = WIDTH - 60
     if aim_x in range(0, 60):
-            aim_x = 60
+        aim_x = 60
 
     # Boundaries and Health
     if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
-            health -= 1
-            ball_reset = True
-            print(f"Health: {health}")
+        health -= 1
+        ball_reset = True
+        print(f"Health: {health}")
 
     if health == 0:
-            print('YOU DIED LOSER!!!')
-            arcade.close_window()
+        print('YOU DIED !!!')
+        current_screen = "Death"
+        health = 5
+        score = 0
 
     if ball_reset == True:
         ball[0] = 320
@@ -146,20 +153,17 @@ def update(delta_time):
 
     dist_x = ball[0] - net[0]
     dist_y = ball[1] - net[1]
-    dist = math.sqrt(dist_x**2 + dist_y**2)
+    dist = math.sqrt(dist_x ** 2 + dist_y ** 2)
 
-    if dist < (ball[2]+ net[2] - 10):
+    if dist < (ball[2] + net[2] - 10):
         ball_reset = True
         '''
         collision = 'yes'
-        
+
     if collision == 'yes':
         '''
         score += 1
         net_speed += 1
-
-        print(f"Score: {score}")
-
 
 
 def on_draw():
@@ -167,34 +171,51 @@ def on_draw():
     global ball
     global aim_x, aim_y
     global show_aim
+    global current_screen
 
     arcade.start_render()
     # Draw in here...
 
-    # net
-    arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
+    if current_screen == "Death":
 
-    # aim
-    if show_aim == True:
-        arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
+        arcade.draw_text("You Died!!! (Press M to go to menu)", 150, HEIGHT/2, arcade.color.BLACK, 20)
 
-    # ball
-    arcade.draw_circle_filled(ball[0], ball[1], ball[2], arcade.color.ORANGE)
+    if current_screen == "Menu":
 
-    # Health
-    for num in range(health):
-        for x in range(health * 25, 24, -25):
-            arcade.draw_xywh_rectangle_filled(x, 64, 20, 20, arcade.color.RADICAL_RED)
+        arcade.draw_text("Menu", WIDTH/2, HEIGHT* 2/3, arcade.color.BLACK)
 
-    # Score
 
-    arcade.draw_text(f"Score: {score}", WIDTH - 80, 64, arcade.color.BLACK)
 
+    if current_screen == "Play":
+        # background
+
+
+        # net
+        arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
+
+        # aim
+        if show_aim == True:
+            arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
+
+        # ball
+        arcade.draw_circle_filled(ball[0], ball[1], ball[2], arcade.color.ORANGE)
+
+        # Health
+        for num in range(health):
+            for x in range(health * 25, 24, -25):
+                arcade.draw_xywh_rectangle_filled(x, 35, 20, 20, arcade.color.RADICAL_RED)
+
+        arcade.draw_text("Health:", 25, 60, arcade.color.BLACK)
+
+        # Score
+
+        arcade.draw_text(f"Score: {score}", WIDTH - 80, 60, arcade.color.BLACK)
 
 
 def on_key_press(key, modifiers):
     global aim_left, aim_right
     global shoot_ball
+    global current_screen
 
     if key == arcade.key.LEFT:
         aim_left = True
@@ -204,12 +225,19 @@ def on_key_press(key, modifiers):
     if key == arcade.key.SPACE:
         shoot_ball = True
 
+    if key == arcade.key.P:
+        current_screen = "Play"
+
+    if key == arcade.key.M:
+        current_screen = "Menu"
+
 
 def on_key_release(key, modifiers):
     global aim_left, aim_right
 
     if key == arcade.key.LEFT:
         aim_left = False
+
     if key == arcade.key.RIGHT:
         aim_right = False
 
