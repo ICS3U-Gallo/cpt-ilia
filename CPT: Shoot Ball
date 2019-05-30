@@ -5,12 +5,21 @@ import math
 WIDTH = 640
 HEIGHT = 480
 
+# Buttons
+#        x ,  y ,  w , h
+play = [175, 210, 125, 50]
+
+instructions = [325, 210, 125, 50]
+
+highscores = []
+
 # net
-#      x,        y      ,  r
+#      x      ,   y           , r
 net = [WIDTH/2, HEIGHT * 5 / 6, 50]
 net_speed = 0
 
 net_reset = False
+
 net_right = True
 net_left = False
 net_up = False
@@ -36,6 +45,7 @@ ball_move = False
 # Score
 score = 0
 collision = "No"
+score_list = [0, 0, 0, 0, 0]
 
 # Health
 health = 5
@@ -153,7 +163,7 @@ def update(delta_time):
         net_reset = True
         health = 5
         score = 0
-
+        
     # Score Keeping
 
     dist_x = ball[0] - net[0]
@@ -174,9 +184,10 @@ def update(delta_time):
 def on_draw():
     global net
     global ball
-    global aim_x, aim_y
-    global show_aim
+    global aim_x, aim_y, show_aim
     global current_screen
+    global play, instructions, highscores
+
 
     arcade.start_render()
     # Draw in here...
@@ -193,12 +204,15 @@ def on_draw():
         arcade.draw_text("Hoops", 253, HEIGHT * 2/3, arcade.color.BLACK, 30, italic=True)
 
         #Play Button
-        arcade.draw_xywh_rectangle_filled(175, 210, 125, 50, arcade.color.ORANGE)
+        arcade.draw_xywh_rectangle_filled(play[0], play[1], play[2], play[3], arcade.color.ORANGE)
         arcade.draw_text("Play", 215, 230, arcade.color.BLACK, 15)
 
         #Instructions Button
-        arcade.draw_xywh_rectangle_filled(325, 210, 125, 50, arcade.color.ORANGE)
+        arcade.draw_xywh_rectangle_filled(instructions[0], instructions[1], instructions[2], instructions[3], arcade.color.ORANGE)
         arcade.draw_text("Instructions", 330, 230, arcade.color.BLACK, 15)
+
+
+        # Highscore Button
 
 
     if current_screen == "Play":
@@ -259,8 +273,15 @@ def on_key_release(key, modifiers):
 
 
 def on_mouse_press(x, y, button, modifiers):
+    global play, instructions, highscores
+    global current_screen
+
     print(x, y)
 
+    if x > play[0] and x < play[0]+play[2] and y > play[1] and y < play[1]+play[3]:
+        current_screen = "Play"
+        
+    
 
 if __name__ == '__main__':
     setup()
