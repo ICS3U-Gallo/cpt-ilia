@@ -146,6 +146,7 @@ def update(delta_time):
         ball_reset = True
         health = 5
 
+
     if ball_reset == True:
         ball[0] = 320
         ball[1] = 150
@@ -174,11 +175,7 @@ def update(delta_time):
 
     if dist < (ball[2] + net[2] - 10):
         ball_reset = True
-        '''
-        collision = 'yes'
 
-    if collision == 'yes':
-        '''
         score += 1
         net_speed += 1
 
@@ -243,9 +240,13 @@ def on_draw():
         arcade.draw_text("Health:", 25, 60, arcade.color.BLACK)
 
         # Score
-
         arcade.draw_text(f"Score: {score}", WIDTH - 80, 60, arcade.color.BLACK)
 
+    if current_screen == "Highscores":
+        arcade.draw_text("Highscores", 200, HEIGHT * 4/5, arcade.color.BLACK, 30, italic=True)
+
+        for num, value in enumerate(score_list):
+            arcade.draw_text(f"{num+1}. {value}", 200, HEIGHT * 2/3 - num * 50, arcade.color.BLACK, 15, italic=True)
 
 def on_key_press(key, modifiers):
     global aim_left, aim_right
@@ -280,10 +281,19 @@ def on_mouse_press(x, y, button, modifiers):
 
     print(x, y)
 
-    if x > play[0] and x < play[0]+play[2] and y > play[1] and y < play[1]+play[3]:
+    if x > play[0] and x < play[0]+play[2] and y > play[1] and y < play[1]+play[3] and current_screen == "Menu":
         current_screen = "Play"
 
+    if x > highscores[0] and x < highscores[0]+highscores[2] and y > highscores[1] and y < highscores[1]+highscores[3] and current_screen == "Menu":
+        current_screen = "Highscores"
 
+    if x > instructions[0] and x < instructions[0]+instructions[2] and y > instructions[1] and y < instructions[1]+instructions[3] and current_screen == "Menu":
+        current_screen = "Instruction"
+        
+def get_highscore():
+    global final_score, score_list, current_screen
+    
+    
 
 if __name__ == '__main__':
     setup()
