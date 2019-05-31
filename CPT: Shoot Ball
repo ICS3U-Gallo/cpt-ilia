@@ -175,9 +175,10 @@ def update(delta_time):
 
     if dist < (ball[2] + net[2] - 10):
         ball_reset = True
-
         score += 1
         net_speed += 1
+
+    get_highscore(final_score)
 
 
 def on_draw():
@@ -289,11 +290,26 @@ def on_mouse_press(x, y, button, modifiers):
 
     if x > instructions[0] and x < instructions[0]+instructions[2] and y > instructions[1] and y < instructions[1]+instructions[3] and current_screen == "Menu":
         current_screen = "Instruction"
-        
-def get_highscore():
+
+def get_highscore(num):
     global final_score, score_list, current_screen
-    
-    
+
+    for i in range(4):
+        if num > max(score_list) and current_screen == "Death":
+            score_list[i] = num
+
+        elif num > score_list[i] and current_screen == "Death":
+            score_list[i] = num
+
+        elif num > score_list[i] and current_screen == "Death":
+            score_list[i] = num
+
+        elif num > score_list[i] and current_screen == "Death":
+            score_list[i] = num
+
+        elif num > score_list[i] and current_screen == "Death":
+            score_list[i] = num
+
 
 if __name__ == '__main__':
     setup()
