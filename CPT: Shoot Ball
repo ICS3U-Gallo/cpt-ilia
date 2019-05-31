@@ -297,10 +297,16 @@ def get_highscore(num):
     global final_score, score_list, current_screen
 
 
+    for i in range(4):
+        if num > score_list[i]:
+            score_list.append(num)
+            score_list.remove(min(score_list))
+            score_list.sort(reverse = True)
+            break
 
+    '''
     if num > max(score_list) and current_screen == "Death":
         score_list[0] = num
-
     elif num > score_list[1] and current_screen == "Death":
         score_list[1] = num
 
@@ -312,7 +318,7 @@ def get_highscore(num):
 
     elif num > score_list[4] and current_screen == "Death":
         score_list[4] = num
-
+    '''
 
 
 
