@@ -298,7 +298,7 @@ def get_highscore(num):
 
 
     for i in range(4):
-        if num > score_list[i]:
+        if num > score_list[4]:
             score_list.append(num)
             score_list.remove(min(score_list))
             score_list.sort(reverse = True)
