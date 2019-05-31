@@ -135,12 +135,14 @@ def update(delta_time):
     if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
         health -= 1
         ball_reset = True
-        print(f"Health: {health}")
+
 
     if health == 0:
         print('YOU DIED !!!')
         current_screen = "Death"
         final_score = score
+        get_highscore(final_score)
+        print(score_list)
         score = 0
         net_reset = True
         ball_reset = True
@@ -178,7 +180,7 @@ def update(delta_time):
         score += 1
         net_speed += 1
 
-    get_highscore(final_score)
+
 
 
 def on_draw():
@@ -294,21 +296,24 @@ def on_mouse_press(x, y, button, modifiers):
 def get_highscore(num):
     global final_score, score_list, current_screen
 
-    for i in range(4):
-        if num > max(score_list) and current_screen == "Death":
-            score_list[i] = num
 
-        elif num > score_list[i] and current_screen == "Death":
-            score_list[i] = num
 
-        elif num > score_list[i] and current_screen == "Death":
-            score_list[i] = num
+    if num > max(score_list) and current_screen == "Death":
+        score_list[0] = num
 
-        elif num > score_list[i] and current_screen == "Death":
-            score_list[i] = num
+    elif num > score_list[1] and current_screen == "Death":
+        score_list[1] = num
 
-        elif num > score_list[i] and current_screen == "Death":
-            score_list[i] = num
+    elif num > score_list[2] and current_screen == "Death":
+        score_list[2] = num
+
+    elif num > score_list[3] and current_screen == "Death":
+        score_list[3] = num
+
+    elif num > score_list[4] and current_screen == "Death":
+        score_list[4] = num
+
+
 
 
 if __name__ == '__main__':
