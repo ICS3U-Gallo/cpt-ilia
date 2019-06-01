@@ -7,9 +7,9 @@ HEIGHT = 480
 
 #net
 net_x = 0
-net_y = HEIGHT * 5/6
+net_y = 445
 
-net_right = False
+net_right = True
 net_left = False
 net_up = False
 net_down = False
@@ -37,27 +37,26 @@ def update(delta_time):
     global net_left
     global net_x
     global net_y
-    global net_up
-    global net_down
-
+    global net_up, net_down
 
     # net_x
-    if net_x <= 0 and net_y != 1/2:
+    if net_x <= 50 and net_y == 445:
             net_right = True
             net_left = False
             net_down = False
             net_up = False
-    elif net_x >= WIDTH and net_y >= HEIGHT * 5/6:
+    elif net_x >= WIDTH-50 and net_y >= 445:
             net_right = False
             net_left = False
             net_down = True
             net_up = False
-    elif net_x == WIDTH and net_y <= HEIGHT * 1/2:
+    elif net_x == WIDTH-50 and net_y <= 300:
             net_right = False
             net_left = True
             net_down = False
             net_up = False
-    elif net_x <= 0 and net_y <= HEIGHT * 1/2:
+
+    elif net_x <= 50 and net_y <= 300:
             net_right = False
             net_left = False
             net_down = False
@@ -66,12 +65,15 @@ def update(delta_time):
 
     if net_right == True:
         net_x += 10
+
     elif net_left ==  True:
         net_x -= 10
 
+
     if net_down == True:
         net_y -= 10
-    elif net_up == True:
+
+    if net_up == True:
         net_y += 10
 
 
@@ -90,6 +92,14 @@ def on_key_press(key, modifiers):
 
 def on_key_release(key, modifiers):
     pass
+
+
+def on_mouse_press(x, y, button, modifiers):
+    pass
+
+
+if __name__ == '__main__':
+    setup()
 
 
 def on_mouse_press(x, y, button, modifiers):
