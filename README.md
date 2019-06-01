@@ -1,6 +1,6 @@
 #Hoops
 
-Basketball gmae for shooting a basketall
+Basketball game for shooting a basketall
 
 # cpt-ilia
 cpt-ilia created by GitHub Classroom
