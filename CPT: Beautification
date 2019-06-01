@@ -182,6 +182,10 @@ def update(delta_time):
     if net_reset == True:
         net = [WIDTH/2, 410, 40]
         net_speed = 0
+        net_left = True
+        net_right = False
+        net_down = False
+        net_up = False
         net_reset = False
 
     if current_screen != "Play":
