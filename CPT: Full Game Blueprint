@@ -114,6 +114,8 @@ def update(delta_time):
 
     if net[1] > HEIGHT - 50:
         net[1] == 410
+    if net[1] < 300:
+        net[1] == 300
 
     # Ball Shoot
     if shoot_ball == True:
@@ -190,7 +192,7 @@ def update(delta_time):
     if dist < (ball[2] + net[2] - 10):
         ball_reset = True
         score += 1
-        net_speed += 1
+        net_speed += 0.5
 
 
 
@@ -241,7 +243,7 @@ def on_draw():
 
         # net
         arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
-        print(net[0], net[1], net[2])
+
         # aim
         if show_aim == True:
             arcade.draw_line(320, 150, aim_x, aim_y, arcade.color.BLACK)
