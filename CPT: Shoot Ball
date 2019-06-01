@@ -249,7 +249,7 @@ def on_draw():
         arcade.draw_text("Highscores", 200, HEIGHT * 4/5, arcade.color.BLACK, 30, italic=True)
 
         for num, value in enumerate(score_list):
-            arcade.draw_text(f"{num+1}. {value}", 200, HEIGHT * 2/3 - num * 50, arcade.color.BLACK, 15, italic=True)
+            arcade.draw_text(f"{num+1}. {value}", 270, HEIGHT * 2/3 - num * 50, arcade.color.BLACK, 15, italic=True)
 
 def on_key_press(key, modifiers):
     global aim_left, aim_right
@@ -297,29 +297,11 @@ def get_highscore(num):
     global final_score, score_list, current_screen
 
 
-    for i in range(4):
-        if num > score_list[4]:
+    if num > score_list[4]:
             score_list.append(num)
             score_list.remove(min(score_list))
             score_list.sort(reverse = True)
-            break
-
-    '''
-    if num > max(score_list) and current_screen == "Death":
-        score_list[0] = num
-    elif num > score_list[1] and current_screen == "Death":
-        score_list[1] = num
-
-    elif num > score_list[2] and current_screen == "Death":
-        score_list[2] = num
-
-    elif num > score_list[3] and current_screen == "Death":
-        score_list[3] = num
-
-    elif num > score_list[4] and current_screen == "Death":
-        score_list[4] = num
-    '''
-
+            
 
 
 if __name__ == '__main__':
