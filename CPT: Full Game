@@ -1,6 +1,6 @@
 import arcade
 import math
-
+import random
 
 WIDTH = 640
 HEIGHT = 480
@@ -234,11 +234,11 @@ def update(delta_time):
     if give_power == True:
         check_collision(ball, power_up)
 
-    if collision == True:
-        score += 1
-        health += 1
-        ball_reset = True
-        give_power = False
+        if collision == True:
+            score += 1
+            health += 1
+            ball_reset = True
+            give_power = False
 
 
 
@@ -405,6 +405,10 @@ def check_collision(a, b):
     else:
         collision = False
 
+
+def choose_power():
+    pass
+    
 
 if __name__ == '__main__':
     setup()
