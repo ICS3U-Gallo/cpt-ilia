@@ -377,5 +377,8 @@ def get_highscore(num):
             score_list.remove(min(score_list))
             score_list.sort(reverse = True)
 
+def collision(a, b):
+    pass
+
 if __name__ == '__main__':
     setup()
