@@ -408,7 +408,7 @@ def check_collision(a, b):
 
 def choose_power():
     pass
-    
+
 
 if __name__ == '__main__':
     setup()
