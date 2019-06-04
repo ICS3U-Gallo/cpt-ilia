@@ -52,13 +52,16 @@ power_speed = 5
 
 power_right = True
 power_left = False
-
 give_power = False
+
+power_img = arcade.load_texture("Images/power_up.png")
 
 # Score
 score = 0
 final_score = 0
 score_list = [0, 0, 0, 0, 0]
+
+collision = False
 
 # Health
 health = 5
@@ -94,6 +97,7 @@ def update(delta_time):
     global health, score, final_score
     global current_screen
     global give_power, power_up, power_left, power_right, power_speed
+    global collision
 
     # net movement
     if net[0] <= 50 and net[1] >= 410:
@@ -202,17 +206,15 @@ def update(delta_time):
         score = 0
 
     # Score Keeping
-    dist_x = ball[0] - net[0]
-    dist_y = ball[1] - net[1]
-    dist = math.sqrt(dist_x ** 2 + dist_y ** 2)
+    check_collision(ball, net)
 
-    if dist < (ball[2] + net[2] - 10):
+    if collision == True:
         ball_reset = True
         score += 1
         net_speed += 0.5
 
     # Power Ups
-        if score % 10 == 0 and score != 0:
+    if score % 10 == 0 and score != 0:
         give_power = True
     else:
         give_power = False
@@ -228,6 +230,15 @@ def update(delta_time):
         power_up[0] += power_speed
     elif power_left == True:
         power_up[0] -= power_speed
+
+    if give_power == True:
+        check_collision(ball, power_up)
+
+    if collision == True:
+        score += 1
+        health += 1
+        ball_reset = True
+        give_power = False
 
 
 
@@ -305,6 +316,8 @@ def on_draw():
         # Power Up
         if give_power == True:
             arcade.draw_circle_filled(power_up[0], power_up[1], power_up[2], arcade.color.GREEN)
+            arcade.draw_texture_rectangle(power_up[0], power_up[1], power_up[2]*3, power_up[2]*3, power_img)
+
     if current_screen == "Highscores":
 
         arcade.draw_text("Highscores", 200, HEIGHT * 4/5, arcade.color.BLACK, 30, italic=True)
@@ -370,15 +383,28 @@ def on_mouse_press(x, y, button, modifiers):
 
 
 def get_highscore(num):
-    global final_score, score_list, current_screen
+    global score_list
 
     if num > score_list[4]:
-            score_list.append(num)
-            score_list.remove(min(score_list))
-            score_list.sort(reverse = True)
+        score_list.append(num)
+        score_list.remove(min(score_list))
+        score_list.sort(reverse = True)
 
-def collision(a, b):
-    pass
+
+def check_collision(a, b):
+    global collision
+
+    dist_x = a[0] - b[0]
+
+    dist_y = a[1] - b[1]
+
+    dist = math.sqrt(dist_x ** 2 + dist_y ** 2)
+
+    if dist < (a[2] + b[2] - 10):
+        collision = True
+    else:
+        collision = False
+
 
 if __name__ == '__main__':
     setup()
