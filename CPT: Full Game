@@ -218,7 +218,7 @@ def update(delta_time):
     if power_up[0] >= WIDTH - 150:
         power_left = True
         power_right = False
-    elif power_up[0] >= 150:
+    elif power_up[0] <= 150:
         power_left = False
         power_right = True
 
