@@ -44,7 +44,16 @@ show_aim = True
 
 # Shoot
 shoot_ball = False
-ball_move = False
+
+# Power up
+#             x    ,  y , r
+power_up = [WIDTH/2, 330, 15]
+power_speed = 5
+
+power_right = True
+power_left = False
+
+give_power = False
 
 # Score
 score = 0
@@ -84,30 +93,29 @@ def update(delta_time):
     global aim_x, aim_y, aim_right, aim_left, show_aim
     global health, score, final_score
     global current_screen
+    global give_power, power_up, power_left, power_right, power_speed
 
     # net movement
     if net[0] <= 50 and net[1] >= 410:
-            net_right = True
-            net_left = False
-            net_down = False
-            net_up = False
+        net_right = True
+        net_left = False
+        net_down = False
+        net_up = False
     elif net[0] >= WIDTH-50 and net[1] >= 410:
-            net_right = False
-            net_left = False
-            net_down = True
-            net_up = False
+        net_right = False
+        net_left = False
+        net_down = True
+        net_up = False
     elif net[0] >= WIDTH-50 and net[1] <= 250:
-            net_right = False
-            net_left = True
-            net_down = False
-            net_up = False
-
+        net_right = False
+        net_left = True
+        net_down = False
+        net_up = False
     elif net[0] <= 50 and net[1] <= 250:
-            net_right = False
-            net_left = False
-            net_down = False
-            net_up = True
-
+        net_right = False
+        net_left = False
+        net_down = False
+        net_up = True
 
     if net_right == True:
         net[0] += net_speed
@@ -119,6 +127,7 @@ def update(delta_time):
     elif net_up == True:
         net[1] += net_speed
 
+    # If Speed Too High
     if net[1] > HEIGHT - 50:
         net[1] == 410
     if net[1] < 300:
@@ -157,7 +166,6 @@ def update(delta_time):
         health -= 1
         ball_reset = True
 
-
     if health == 0:
         print('YOU DIED !!!')
         current_screen = "Death"
@@ -168,7 +176,6 @@ def update(delta_time):
         net_reset = True
         ball_reset = True
         health = 5
-
 
     if ball_reset == True:
         ball[0] = 320
@@ -195,7 +202,6 @@ def update(delta_time):
         score = 0
 
     # Score Keeping
-
     dist_x = ball[0] - net[0]
     dist_y = ball[1] - net[1]
     dist = math.sqrt(dist_x ** 2 + dist_y ** 2)
@@ -205,7 +211,22 @@ def update(delta_time):
         score += 1
         net_speed += 0.5
 
+    # Power Ups
+    if score % 10 == 0 and score != 0:
+        give_power = True
 
+    if power_up[0] >= WIDTH - 150:
+        power_left = True
+        power_right = False
+    elif power_up[0] >= 150:
+        power_left = False
+        power_right = True
+
+    if power_right == True:
+        power_up[0] += power_speed
+
+    if power_left == True:
+        power_up[0] -= power_speed
 
 
 def on_draw():
@@ -215,6 +236,7 @@ def on_draw():
     global current_screen, menu_background
     global play, instructions, highscores
     global final_score
+    global power_up, give_power
 
 
     arcade.start_render()
@@ -278,7 +300,9 @@ def on_draw():
         # Score
         arcade.draw_text(f"Score: {score}", WIDTH - 80, 60, arcade.color.BLACK)
 
-
+        # Power Up
+        if give_power == True:
+            arcade.draw_circle_filled(power_up[0], power_up[1], power_up[2], arcade.color.GREEN)
     if current_screen == "Highscores":
 
         arcade.draw_text("Highscores", 200, HEIGHT * 4/5, arcade.color.BLACK, 30, italic=True)
