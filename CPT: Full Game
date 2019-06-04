@@ -212,8 +212,10 @@ def update(delta_time):
         net_speed += 0.5
 
     # Power Ups
-    if score % 10 == 0 and score != 0:
+        if score % 10 == 0 and score != 0:
         give_power = True
+    else:
+        give_power = False
 
     if power_up[0] >= WIDTH - 150:
         power_left = True
@@ -224,9 +226,9 @@ def update(delta_time):
 
     if power_right == True:
         power_up[0] += power_speed
-
-    if power_left == True:
+    elif power_left == True:
         power_up[0] -= power_speed
+
 
 
 def on_draw():
