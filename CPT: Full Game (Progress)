@@ -48,6 +48,7 @@ shoot_ball = False
 # Power up
 #             x    ,  y , r
 power_up = [WIDTH/2, 330, 15]
+power_name = "health"
 power_speed = 5
 
 power_right = True
@@ -233,12 +234,16 @@ def update(delta_time):
 
     if give_power == True:
         check_collision(ball, power_up)
+        random_power()
 
         if collision == True:
+
             score += 1
             health += 1
             ball_reset = True
             give_power = False
+
+
 
 
 
@@ -406,8 +411,27 @@ def check_collision(a, b):
         collision = False
 
 
-def choose_power():
-    pass
+def random_power():
+    global give_power, power_name
+
+    
+    num = random.randrange(3)
+
+
+    while power_name != 'health' or power_name != 'damage' or power_name != 'score':
+        if give_power == True:
+            if num == 0:
+                power_name = "health"
+                print(power_name)
+                break
+            elif num == 1:
+                power_name = "damage"
+                print(power_name)
+                break
+            elif num == 2:
+                power_name = "score"
+                print(power_name)
+                break
 
 
 if __name__ == '__main__':
