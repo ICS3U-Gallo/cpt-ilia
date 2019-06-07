@@ -100,43 +100,9 @@ def update(delta_time):
     global give_power, power_up, power_left, power_right, power_speed
     global collision
 
-    # net movement
-    if net[0] <= 50 and net[1] >= 410:
-        net_right = True
-        net_left = False
-        net_down = False
-        net_up = False
-    elif net[0] >= WIDTH-50 and net[1] >= 410:
-        net_right = False
-        net_left = False
-        net_down = True
-        net_up = False
-    elif net[0] >= WIDTH-50 and net[1] <= 250:
-        net_right = False
-        net_left = True
-        net_down = False
-        net_up = False
-    elif net[0] <= 50 and net[1] <= 250:
-        net_right = False
-        net_left = False
-        net_down = False
-        net_up = True
-
-    if net_right == True:
-        net[0] += net_speed
-    elif net_left == True:
-        net[0] -= net_speed
-
-    if net_down == True:
-        net[1] -= net_speed
-    elif net_up == True:
-        net[1] += net_speed
-
-    # If Speed Too High
-    if net[1] > HEIGHT - 50:
-        net[1] == 410
-    if net[1] < 300:
-        net[1] == 300
+    if current_screen == "Play":
+        # net movement
+        net_movement(75, WIDTH - 75, 410, 250)
 
     # Ball Shoot
     if shoot_ball == True:
@@ -233,15 +199,26 @@ def update(delta_time):
         power_up[0] -= power_speed
 
     if give_power == True:
+
         check_collision(ball, power_up)
+
         random_power()
 
         if collision == True:
+            if power_name == "health":
+                score += 1
+                health += 1
 
-            score += 1
-            health += 1
+            elif power_name == "slownet":
+                net_speed = 0.5
+                score += 1
+
+            elif power_name == "scorebonus":
+                score += 5
+
             ball_reset = True
             give_power = False
+
 
 
 
@@ -387,13 +364,43 @@ def on_mouse_press(x, y, button, modifiers):
         current_screen = "Instructions"
 
 
-def get_highscore(num):
-    global score_list
+def net_movement(left_x, right_x, top_y, bottom_y):
+    global net, net_speed, net_right, net_left, net_up, net_down
 
-    if num > score_list[4]:
-        score_list.append(num)
-        score_list.remove(min(score_list))
-        score_list.sort(reverse = True)
+    if net[0] <= left_x and net[1] >= top_y:
+        net_right = True
+        net_left = False
+        net_down = False
+        net_up = False
+
+    elif net[0] >= right_x and net[1] >= top_y:
+        net_right = False
+        net_left = False
+        net_down = True
+        net_up = False
+
+    elif net[0] >= right_x and net[1] <= bottom_y:
+        net_right = False
+        net_left = True
+        net_down = False
+        net_up = False
+
+    elif net[0] <= left_x and net[1] <= bottom_y:
+        net_right = False
+        net_left = False
+        net_down = False
+        net_up = True
+
+
+    if net_right == True:
+        net[0] += net_speed
+    elif net_left == True:
+        net[0] -= net_speed
+
+    if net_down == True:
+        net[1] -= net_speed
+    elif net_up == True:
+        net[1] += net_speed
 
 
 def check_collision(a, b):
@@ -411,10 +418,19 @@ def check_collision(a, b):
         collision = False
 
 
+def get_highscore(num):
+    global score_list
+
+    if num > score_list[4]:
+        score_list.append(num)
+        score_list.remove(min(score_list))
+        score_list.sort(reverse = True)
+
+
 def random_power():
     global give_power, power_name
 
-    
+
     num = random.randrange(3)
 
 
@@ -425,13 +441,15 @@ def random_power():
                 print(power_name)
                 break
             elif num == 1:
-                power_name = "damage"
+                power_name = "slownet"
                 print(power_name)
                 break
             elif num == 2:
-                power_name = "score"
+                power_name = "scorebonus"
                 print(power_name)
                 break
+
+
 
 
 if __name__ == '__main__':
