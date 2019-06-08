@@ -67,7 +67,7 @@ collision = False
 # Health
 health = 5
 
-# Screen and Images
+# Screens
 current_screen = "Menu"
 
 menu_background = arcade.load_texture("Images/background.jpg")
@@ -105,19 +105,11 @@ def update(delta_time):
         net_movement(75, WIDTH - 75, 410, 250)
 
         # Ball Shoot
-        if shoot_ball == True:
+        if shoot_ball is True:
             shoot()
 
-    # Aim
-    if aim_left == True:
-        aim_x -= 5
-    elif aim_right == True:
-        aim_x += 5
-
-    if aim_x in range(WIDTH-60, WIDTH + 1):
-        aim_x = WIDTH - 60
-    if aim_x in range(0, 60):
-        aim_x = 60
+        # Aim
+        aim_movement(60, WIDTH-60)
 
     # Boundaries and Health
     if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
@@ -125,17 +117,16 @@ def update(delta_time):
         ball_reset = True
 
     if health == 0:
-        print('YOU DIED !!!')
         current_screen = "Death"
         final_score = score
         get_highscore(final_score)
         print(score_list)
-        score = 0
         net_reset = True
         ball_reset = True
+        score = 0
         health = 5
 
-    if ball_reset == True:
+    if ball_reset is True:
         ball[0] = 320
         ball[1] = 115
         aim_x = 320
@@ -144,7 +135,7 @@ def update(delta_time):
         show_aim = True
         ball_reset = False
 
-    if net_reset == True:
+    if net_reset is True:
         net = [WIDTH/2, 410, 40]
         net_speed = 0
         net_left = True
@@ -173,42 +164,24 @@ def update(delta_time):
     else:
         give_power = False
 
-    if power_up[0] >= WIDTH - 150:
-        power_left = True
-        power_right = False
-    elif power_up[0] <= 150:
-        power_left = False
-        power_right = True
-
-    if power_right == True:
-        power_up[0] += power_speed
-    elif power_left == True:
-        power_up[0] -= power_speed
-
-    if give_power == True:
-
+    if give_power is True:
+        power_movement(WIDTH-150, 150)
+        random_power()
         check_collision(ball, power_up)
 
-        random_power()
+        if collision is True:
 
-        if collision == True:
             if power_name == "health":
                 score += 1
                 health += 1
-
             elif power_name == "slownet":
                 net_speed = 0.5
                 score += 1
-
             elif power_name == "scorebonus":
                 score += 5
 
             ball_reset = True
             give_power = False
-
-
-
-
 
 
 def on_draw():
@@ -339,8 +312,6 @@ def on_mouse_press(x, y, button, modifiers):
     global play, instructions, highscores
     global current_screen
 
-    print(x, y)
-
     if x > play[0] and x < play[0]+play[2] and y > play[1] and y < play[1]+play[3] and current_screen == "Menu":
         current_screen = "Play"
 
@@ -359,36 +330,45 @@ def net_movement(left_x, right_x, top_y, bottom_y):
         net_left = False
         net_down = False
         net_up = False
-
     elif net[0] >= right_x and net[1] >= top_y:
         net_right = False
         net_left = False
         net_down = True
         net_up = False
-
     elif net[0] >= right_x and net[1] <= bottom_y:
         net_right = False
         net_left = True
         net_down = False
         net_up = False
-
     elif net[0] <= left_x and net[1] <= bottom_y:
         net_right = False
         net_left = False
         net_down = False
         net_up = True
 
-
-    if net_right == True:
+    if net_right is True:
         net[0] += net_speed
     elif net_left == True:
         net[0] -= net_speed
 
-    if net_down == True:
+    if net_down is True:
         net[1] -= net_speed
-    elif net_up == True:
+    elif net_up is True:
         net[1] += net_speed
 
+
+def aim_movement(left_border, right_border):
+    global aim_x, aim_right, aim_left
+
+    if aim_left == True:
+        aim_x -= 5
+    elif aim_right == True:
+        aim_x += 5
+
+    if aim_x > right_border:
+        aim_x = right_border
+    elif aim_x < left_border:
+        aim_x = left_border
 
 def shoot():
     global aim_x, aim_y, show_aim
@@ -409,11 +389,11 @@ def shoot():
 
     show_aim = False
 
+
 def check_collision(a, b):
     global collision
 
     dist_x = a[0] - b[0]
-
     dist_y = a[1] - b[1]
 
     dist = math.sqrt(dist_x ** 2 + dist_y ** 2)
@@ -430,7 +410,7 @@ def get_highscore(num):
     if num > score_list[4]:
         score_list.append(num)
         score_list.remove(min(score_list))
-        score_list.sort(reverse = True)
+        score_list.sort(reverse=True)
 
 
 def random_power():
@@ -438,8 +418,7 @@ def random_power():
 
     num = random.randrange(3)
 
-
-    while power_name != 'health' or power_name != 'damage' or power_name != 'score':
+    while power_name != 'health' or power_name != 'slownet' or power_name != 'scorebonus':
         if give_power == True:
             if num == 0:
                 power_name = "health"
@@ -455,6 +434,21 @@ def random_power():
                 break
 
 
+def power_movement(left_x, right_x):
+    global WIDTH
+    global power_up, power_left, power_right
+
+    if power_up[0] >= left_x:
+        power_left = True
+        power_right = False
+    elif power_up[0] <= right_x:
+        power_left = False
+        power_right = True
+
+    if power_right == True:
+        power_up[0] += power_speed
+    elif power_left == True:
+        power_up[0] -= power_speed
 
 
 if __name__ == '__main__':
