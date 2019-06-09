@@ -109,7 +109,7 @@ def update(delta_time):
             shoot()
 
         # Aim
-        aim_movement(60, WIDTH-60)
+        aim_movement(100, WIDTH-100)
 
     # Boundaries and Health
     if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
@@ -246,8 +246,8 @@ def on_draw():
         arcade.draw_texture_rectangle(ball[0], ball[1], ball[2]*2, ball[2]*2, ball_img)
 
         # Health
-        for num in range(health):
-            for x in range(health * 25, 24, -25):
+        #for num in range(health):
+        for x in range(health * 25, 24, -25):
                 arcade.draw_xywh_rectangle_filled(x, 35, 20, 20, arcade.color.RADICAL_RED)
 
         arcade.draw_text("Health:", 25, 60, arcade.color.BLACK)
@@ -275,6 +275,7 @@ def on_key_press(key, modifiers):
     global aim_left, aim_right
     global shoot_ball
     global current_screen
+    global final_score, score
 
     # In-game Controls
     if key == arcade.key.LEFT and current_screen == "Play":
@@ -359,15 +360,16 @@ def net_movement(left_x, right_x, top_y, bottom_y):
 
 def aim_movement(left_border, right_border):
     global aim_x, aim_right, aim_left
+    global WIDTH
 
-    if aim_left == True:
+    if aim_left is True:
         aim_x -= 5
-    elif aim_right == True:
+    elif aim_right is True:
         aim_x += 5
 
-    if aim_x > right_border:
+    if aim_x in range(right_border, WIDTH):
         aim_x = right_border
-    elif aim_x < left_border:
+    elif aim_x in range(0, left_border):
         aim_x = left_border
 
 def shoot():
@@ -419,7 +421,7 @@ def random_power():
     num = random.randrange(3)
 
     while power_name != 'health' or power_name != 'slownet' or power_name != 'scorebonus':
-        if give_power == True:
+        if give_power is True:
             if num == 0:
                 power_name = "health"
                 print(power_name)
@@ -445,11 +447,12 @@ def power_movement(left_x, right_x):
         power_left = False
         power_right = True
 
-    if power_right == True:
+    if power_right is True:
         power_up[0] += power_speed
-    elif power_left == True:
+    elif power_left is True:
         power_up[0] -= power_speed
 
 
 if __name__ == '__main__':
     setup()
+
