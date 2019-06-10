@@ -72,17 +72,6 @@ current_screen = "Menu"
 
 menu_background = arcade.load_texture("Images/background.jpg")
 
-#Bottom information bar stuff
-
-bad_words = ['frick', 'vishnu', 'dog']
-
-#Put this stuff somewhere else!!!
-try:
-    name = str(input("Enter Your Username:")).lower()
-except name in bad_words:
-    print("Try again:")
-    name = (input("Enter Your Username:"))
-
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "Hoops")
@@ -203,7 +192,6 @@ def on_draw():
     global play, instructions, highscores
     global final_score
     global power_up, give_power
-    global name, bad_words
 
 
     arcade.start_render()
@@ -237,15 +225,14 @@ def on_draw():
         arcade.draw_xywh_rectangle_filled(highscores[0], highscores[1], highscores[2], highscores[3], arcade.color.ORANGE)
         arcade.draw_text("Highscores", 332, 228, arcade.color.BLACK, 15)
 
-        # Username
-
-        arcade.draw_text(f"Name: {name}", 200, 35, arcade.color.BLACK)
-
 
     if current_screen == "Play":
 
         # background
         arcade.set_background_color(arcade.color.WHITE)
+
+        # Bottom bar
+        arcade.draw_rectangle_filled(WIDTH/2, 30, WIDTH, 95, arcade.color.SOAP)
 
         # net
         arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
