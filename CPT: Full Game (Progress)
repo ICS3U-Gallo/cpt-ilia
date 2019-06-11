@@ -13,6 +13,8 @@ highscores = [325, 210, 125, 50]
 
 instructions = [237.5, 140, 150, 50]
 
+hisc = open("highscores.txt", "w+")
+
 # net
 #        x    ,  y , r
 net = [WIDTH/2, 410, 40]
@@ -99,6 +101,14 @@ def update(delta_time):
     global current_screen
     global give_power, power_up, power_left, power_right, power_speed
     global collision
+
+    if current_screen == "Instructions":
+        temper = []
+        numbers = hisc.readlines()
+        for x in numbers:
+            temper.append(x)
+        print(temper)
+
 
     if current_screen == "Play":
         # net movement
@@ -410,12 +420,21 @@ def check_collision(a, b):
 
 def get_highscore(num):
     global score_list
+    global hisc
 
     if num > score_list[4]:
         score_list.append(num)
         score_list.remove(min(score_list))
         score_list.sort(reverse=True)
 
+    hisc = open("highscores.txt", "w+")
+    for i in score_list:
+        hisc.write(str(i) + "\n")
+
+    numbers = hisc.readlines(1)
+    print(numbers)
+
+    hisc.close()
 
 def random_power():
     global give_power, power_name
