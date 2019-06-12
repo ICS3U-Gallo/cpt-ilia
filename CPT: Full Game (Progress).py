@@ -13,8 +13,6 @@ highscores = [325, 210, 125, 50]
 
 instructions = [237.5, 140, 150, 50]
 
-hisc = open("highscores.txt", "w+")
-
 # net
 #        x    ,  y , r
 net = [WIDTH/2, 410, 40]
@@ -102,13 +100,6 @@ def update(delta_time):
     global give_power, power_up, power_left, power_right, power_speed
     global collision
 
-    if current_screen == "Instructions":
-        temper = []
-        numbers = hisc.readlines()
-        for x in numbers:
-            temper.append(x)
-        print(temper)
-
 
     if current_screen == "Play":
         # net movement
@@ -121,77 +112,71 @@ def update(delta_time):
         # Aim
         aim_movement(100, WIDTH-100)
 
-    # Boundaries and Health
-    if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
-        health -= 1
-        ball_reset = True
-
-    if health == 0:
-        current_screen = "Death"
-        final_score = score
-        get_highscore(final_score)
-        print(score_list)
-        net_reset = True
-        ball_reset = True
-        score = 0
-        health = 5
-
-    if ball_reset is True:
-        ball[0] = 320
-        ball[1] = 115
-        aim_x = 320
-        aim_y = 215
-        shoot_ball = False
-        show_aim = True
-        ball_reset = False
-
-    if net_reset is True:
-        net = [WIDTH/2, 410, 40]
-        net_speed = 0
-        net_left = True
-        net_right = False
-        net_down = False
-        net_up = False
-        net_reset = False
-
-    if current_screen != "Play":
-        ball_reset = True
-        net_reset = True
-        health = 5
-        score = 0
-
-    # Score Keeping
-    check_collision(ball, net)
-
-    if collision == True:
-        ball_reset = True
-        score += 1
-        net_speed += 0.5
-
-    # Power Ups
-    if score % 10 == 0 and score != 0:
-        give_power = True
-    else:
-        give_power = False
-
-    if give_power is True:
-        power_movement(WIDTH-150, 150)
-        random_power()
-        check_collision(ball, power_up)
-
-        if collision is True:
-
-            if power_name == "health":
-                score += 1
-                health += 1
-            elif power_name == "slownet":
-                net_speed = 0.5
-                score += 1
-            elif power_name == "scorebonus":
-                score += 5
-
+        # Boundaries and Health
+        if ball[1] >= HEIGHT or ball[0] <= 0 or ball[0] >= WIDTH:
+            health -= 1
             ball_reset = True
+
+        if health == 0:
+            death()
+
+
+        if ball_reset is True:
+            ball[0] = 320
+            ball[1] = 115
+            aim_x = 320
+            aim_y = 215
+            shoot_ball = False
+            show_aim = True
+            ball_reset = False
+
+        if net_reset is True:
+            net = [WIDTH/2, 410, 40]
+            net_speed = 0
+            net_left = True
+            net_right = False
+            net_down = False
+            net_up = False
+            net_reset = False
+    
+        if current_screen != "Play":
+            ball_reset = True
+            net_reset = True
+            health = 5
+            score = 0
+
+        # Score Keeping
+        check_collision(ball, net)
+    
+        if collision is True:
+            ball_reset = True
+            score += 1
+            net_speed += 0.5
+    
+        # Power Ups
+        if score % 10 == 0 and score != 0:
+            give_power = True
+        else:
             give_power = False
+    
+        if give_power is True:
+            power_movement(WIDTH-150, 150)
+            random_power()
+            check_collision(ball, power_up)
+    
+            if collision is True:
+    
+                if power_name == "health":
+                    score += 1
+                    health += 1
+                elif power_name == "slownet":
+                    net_speed = 0.5
+                    score += 1
+                elif power_name == "scorebonus":
+                    score += 5
+    
+                ball_reset = True
+                give_power = False
 
 
 def on_draw():
@@ -418,6 +403,21 @@ def check_collision(a, b):
         collision = False
 
 
+def death():
+    global current_screen
+    global final_score, score
+    global ball_reset
+    global health
+
+    current_screen = "Death"
+    final_score = score
+    get_highscore(final_score)
+    print(score_list)
+    ball_reset = True
+    score = 0
+    health = 5
+
+
 def get_highscore(num):
     global score_list
     global hisc
@@ -427,14 +427,6 @@ def get_highscore(num):
         score_list.remove(min(score_list))
         score_list.sort(reverse=True)
 
-    hisc = open("highscores.txt", "w+")
-    for i in score_list:
-        hisc.write(str(i) + "\n")
-
-    numbers = hisc.readlines(1)
-    print(numbers)
-
-    hisc.close()
 
 def random_power():
     global give_power, power_name
