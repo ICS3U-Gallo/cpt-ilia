@@ -120,7 +120,6 @@ def update(delta_time):
         if health == 0:
             death()
 
-
         if ball_reset is True:
             ball[0] = 320
             ball[1] = 115
@@ -138,7 +137,7 @@ def update(delta_time):
             net_down = False
             net_up = False
             net_reset = False
-    
+
         if current_screen != "Play":
             ball_reset = True
             net_reset = True
@@ -147,25 +146,25 @@ def update(delta_time):
 
         # Score Keeping
         check_collision(ball, net)
-    
+
         if collision is True:
             ball_reset = True
             score += 1
             net_speed += 0.5
-    
+
         # Power Ups
         if score % 10 == 0 and score != 0:
             give_power = True
         else:
             give_power = False
-    
+
         if give_power is True:
             power_movement(WIDTH-150, 150)
             random_power()
             check_collision(ball, power_up)
-    
+
             if collision is True:
-    
+
                 if power_name == "health":
                     score += 1
                     health += 1
@@ -174,7 +173,7 @@ def update(delta_time):
                     score += 1
                 elif power_name == "scorebonus":
                     score += 5
-    
+
                 ball_reset = True
                 give_power = False
 
