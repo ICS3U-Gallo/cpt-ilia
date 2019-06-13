@@ -5,6 +5,12 @@ import random
 WIDTH = 640
 HEIGHT = 480
 
+show_images = True
+write_msg = False
+
+msg_part1 = "!!!YOU ARE CURRENTLY IN UGLY MODE!!!"
+msg_part2 = "!!!PLEASE MAKE SURE THAT YOU HAVE LOADED ALL THE IMAGES FROM MY GITHUB TO GO TO NORMAL MODE!!!"
+
 # Buttons
 #        x ,  y ,  w , h
 play = [175, 210, 125, 50]
@@ -25,7 +31,11 @@ net_left = False
 net_up = False
 net_down = False
 
-net_img = arcade.load_texture("Images/net.jpg")
+try:
+    net_img = arcade.load_texture("Images/net.jpg")
+except FileNotFoundError:
+    show_images = False
+    write_msg = True
 
 # Ball
 #        x    y   r
@@ -33,7 +43,11 @@ ball = [320, 115, 25]
 ball_speed = 15
 ball_reset = False
 
-ball_img = arcade.load_texture("Images/basketball.png")
+try:
+    ball_img = arcade.load_texture("Images/basketball.png")
+except FileNotFoundError:
+    show_images = False
+    write_msg = True
 
 # Aim
 aim_x = 320
@@ -55,7 +69,11 @@ power_right = True
 power_left = False
 give_power = False
 
-power_img = arcade.load_texture("Images/power_up.png")
+try:
+    power_img = arcade.load_texture("Images/power_up.png")
+except FileNotFoundError:
+    show_images = False
+    write_msg = True
 
 # Score
 score = 0
@@ -70,8 +88,11 @@ health = 5
 # Screens
 current_screen = "Menu"
 
-menu_background = arcade.load_texture("Images/background.jpg")
-
+try:
+    menu_background = arcade.load_texture("Images/background.jpg")
+except FileNotFoundError:
+    show_images = False
+    write_msg = True
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "Hoops")
@@ -171,11 +192,15 @@ def on_draw():
     global play, instructions, highscores
     global final_score
     global power_up, give_power
+    global show_images
 
     arcade.start_render()
     # Draw in here...
 
     if current_screen == "Death":
+        if write_msg is True:
+            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
 
         arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 20)
         arcade.set_background_color(arcade.color.RED_DEVIL)
@@ -184,8 +209,12 @@ def on_draw():
 
 
     if current_screen == "Menu":
+        if write_msg is True:
+            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
 
-        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT, menu_background)
+        if show_images is True:
+            arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT, menu_background)
 
         arcade.set_background_color(arcade.color.WHITE)
 
@@ -204,6 +233,9 @@ def on_draw():
         arcade.draw_text("Highscores", 332, 228, arcade.color.BLACK, 15)
 
     if current_screen == "Play":
+        if write_msg is True:
+            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
 
         # background
         arcade.set_background_color(arcade.color.WHITE)
@@ -216,7 +248,8 @@ def on_draw():
         # net
         arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
 
-        arcade.draw_texture_rectangle(net[0], net[1], net[2]*3, net[2]*2.5, net_img)
+        if show_images is True:
+            arcade.draw_texture_rectangle(net[0], net[1], net[2]*3, net[2]*2.5, net_img)
 
         # aim
         if show_aim == True:
@@ -225,7 +258,8 @@ def on_draw():
         # ball
         arcade.draw_circle_filled(ball[0], ball[1], ball[2], arcade.color.ORANGE)
 
-        arcade.draw_texture_rectangle(ball[0], ball[1], ball[2]*2, ball[2]*2, ball_img)
+        if show_images is True:
+            arcade.draw_texture_rectangle(ball[0], ball[1], ball[2]*2, ball[2]*2, ball_img)
 
         # Health
         for x in range(health * 25, 24, -25):
@@ -239,11 +273,17 @@ def on_draw():
         # Power Up
         if give_power == True:
             arcade.draw_circle_filled(power_up[0], power_up[1], power_up[2], arcade.color.GREEN)
-            arcade.draw_texture_rectangle(power_up[0], power_up[1], power_up[2]*3, power_up[2]*3, power_img)
+
+            if show_images is True:
+                arcade.draw_texture_rectangle(power_up[0], power_up[1], power_up[2]*3, power_up[2]*3, power_img)
 
         arcade.draw_text(f" Last Power Up: {power_name}", 225 , 40, arcade.color.CHARLESTON_GREEN, 15)
 
     if current_screen == "Highscores":
+        if write_msg is True:
+            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+
         arcade.set_background_color(arcade.color.WHITE)
 
         arcade.draw_text("Highscores", 200, HEIGHT * 4/5, arcade.color.BLACK, 30, italic=True)
@@ -255,6 +295,10 @@ def on_draw():
         arcade.draw_text("Press 'm' for menu", 260, 15, arcade.color.BLACK)
 
     if current_screen == "Instructions":
+        if write_msg is True:
+            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+
         arcade.set_background_color(arcade.color.WHITE)
 
         arcade.draw_text("Instructions", 208, 425, arcade.color.BLACK, 30, italic=True)
@@ -264,7 +308,8 @@ def on_draw():
 
         arcade.draw_text("-'m' takes you to the main menu", 80, 340, arcade.color.BLACK)
         arcade.draw_text("- 'i' takes you to the instructions screen", 80, 320, arcade.color.BLACK)
-        arcade.draw_text("-'h' takes you to the top  5 highscores during this session", 80, 300, arcade.color.BLACK)
+        arcade.draw_text("-'h' takes you to the top  5 highscores during your current session", 80, 300, arcade.color.BLACK)
+        arcade.draw_text("-'p' start playing the game (only works from menu)", 80, 280, arcade.color.BLACK)
 
         arcade.draw_text("Press 'm' for menu", 250, 15, arcade.color.BLACK)
 
@@ -499,7 +544,6 @@ def death():
     power_name = "none"
     score = 0
     health = 5
-
 
 
 if __name__ == '__main__':
