@@ -48,7 +48,7 @@ shoot_ball = False
 # Power up
 #             x    ,  y , r
 power_up = [WIDTH/2, 330, 15]
-power_name = "health"
+power_name = "none"
 power_speed = 5
 
 power_right = True
@@ -100,7 +100,6 @@ def update(delta_time):
     global give_power, power_up, power_left, power_right, power_speed
     global collision
 
-
     if current_screen == "Play":
         # net movement
         net_movement(75, WIDTH - 75, 410, 250)
@@ -120,62 +119,49 @@ def update(delta_time):
         if health == 0:
             death()
 
-        if ball_reset is True:
-            ball[0] = 320
-            ball[1] = 115
-            aim_x = 320
-            aim_y = 215
-            shoot_ball = False
-            show_aim = True
-            ball_reset = False
+    if ball_reset is True:
+        reset('ball')
 
-        if net_reset is True:
-            net = [WIDTH/2, 410, 40]
-            net_speed = 0
-            net_left = True
-            net_right = False
-            net_down = False
-            net_up = False
-            net_reset = False
+    if net_reset is True:
+        reset("net")
 
-        if current_screen != "Play":
-            ball_reset = True
-            net_reset = True
-            health = 5
-            score = 0
+    if current_screen != "Play":
+        ball_reset = True
+        net_reset = True
+        health = 5
+        score = 0
 
-        # Score Keeping
-        check_collision(ball, net)
+    # Score Keeping
+    check_collision(ball, net)
+
+    if collision == True:
+        ball_reset = True
+        score += 1
+        net_speed += 0.5
+
+    # Power Ups
+    if score % 10 == 0 and score != 0:
+        give_power = True
+    else:
+        give_power = False
+
+    if give_power is True:
+        power_movement(WIDTH-150, 150)
+        random_power()
+        check_collision(ball, power_up)
 
         if collision is True:
+            if power_name == "health":
+                score += 1
+                health += 1
+            elif power_name == "slownet":
+                net_speed = 0.5
+                score += 1
+            elif power_name == "scorebonus":
+                score += 5
+
             ball_reset = True
-            score += 1
-            net_speed += 0.5
-
-        # Power Ups
-        if score % 10 == 0 and score != 0:
-            give_power = True
-        else:
             give_power = False
-
-        if give_power is True:
-            power_movement(WIDTH-150, 150)
-            random_power()
-            check_collision(ball, power_up)
-
-            if collision is True:
-
-                if power_name == "health":
-                    score += 1
-                    health += 1
-                elif power_name == "slownet":
-                    net_speed = 0.5
-                    score += 1
-                elif power_name == "scorebonus":
-                    score += 5
-
-                ball_reset = True
-                give_power = False
 
 
 def on_draw():
@@ -186,7 +172,6 @@ def on_draw():
     global play, instructions, highscores
     global final_score
     global power_up, give_power
-
 
     arcade.start_render()
     # Draw in here...
@@ -219,14 +204,13 @@ def on_draw():
         arcade.draw_xywh_rectangle_filled(highscores[0], highscores[1], highscores[2], highscores[3], arcade.color.ORANGE)
         arcade.draw_text("Highscores", 332, 228, arcade.color.BLACK, 15)
 
-
     if current_screen == "Play":
 
         # background
         arcade.set_background_color(arcade.color.WHITE)
 
         # Bottom bar
-        arcade.draw_rectangle_filled(WIDTH/2, 30, WIDTH, 95, arcade.color.SOAP)
+        arcade.draw_rectangle_filled(WIDTH / 2, 30, WIDTH, 95, arcade.color.SOAP)
 
         # net
         arcade.draw_circle_filled(net[0], net[1], net[2], arcade.color.BLUE)
@@ -249,12 +233,14 @@ def on_draw():
         arcade.draw_text("Health:", 25, 60, arcade.color.BLACK)
 
         # Score
-        arcade.draw_text(f"Score: {score}", WIDTH - 80, 60, arcade.color.BLACK)
+        arcade.draw_text(f"Score: {score}", WIDTH - 80, 40, arcade.color.BLACK, 15)
 
         # Power Up
         if give_power == True:
             arcade.draw_circle_filled(power_up[0], power_up[1], power_up[2], arcade.color.GREEN)
             arcade.draw_texture_rectangle(power_up[0], power_up[1], power_up[2]*3, power_up[2]*3, power_img)
+
+        arcade.draw_text(f" Last Power Up: {power_name}", 225 , 40, arcade.color.CHARLESTON_GREEN, 15)
 
     if current_screen == "Highscores":
 
@@ -402,24 +388,8 @@ def check_collision(a, b):
         collision = False
 
 
-def death():
-    global current_screen
-    global final_score, score
-    global ball_reset
-    global health
-
-    current_screen = "Death"
-    final_score = score
-    get_highscore(final_score)
-    print(score_list)
-    ball_reset = True
-    score = 0
-    health = 5
-
-
 def get_highscore(num):
     global score_list
-    global hisc
 
     if num > score_list[4]:
         score_list.append(num)
@@ -432,7 +402,7 @@ def random_power():
 
     num = random.randrange(3)
 
-    while power_name != 'health' or power_name != 'slownet' or power_name != 'scorebonus':
+    while power_name != "health" or power_name != "slownet" or power_name != "scorebonus":
         if give_power is True:
             if num == 0:
                 power_name = "health"
@@ -465,5 +435,52 @@ def power_movement(left_x, right_x):
         power_up[0] -= power_speed
 
 
+def reset(object):
+    global net, net_speed, net_left, net_right, net_down, net_up, net_reset
+    global ball, shoot_ball, ball_reset
+    global aim_x, aim_y, show_aim
+
+    # net reset
+    if object == "net":
+        net = [WIDTH / 2, 410, 40]
+        net_speed = 0
+        net_left = True
+        net_right = False
+        net_down = False
+        net_up = False
+        net_reset = False
+
+    # ball reset
+    if object == "ball":
+        ball[0] = 320
+        ball[1] = 115
+        aim_x = 320
+        aim_y = 215
+        shoot_ball = False
+        show_aim = True
+        ball_reset = False
+
+
+def death():
+    global current_screen
+    global final_score, score
+    global ball_reset
+    global health
+    global net_reset
+    global power_name
+
+    current_screen = "Death"
+    final_score = score
+    get_highscore(final_score)
+    print(score_list)
+    net_reset = True
+    ball_reset = True
+    power_name = "none"
+    score = 0
+    health = 5
+
+
+
 if __name__ == '__main__':
     setup()
+
