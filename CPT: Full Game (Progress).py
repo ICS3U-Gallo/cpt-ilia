@@ -118,7 +118,7 @@ def update(delta_time):
     global aim_x, aim_y, aim_right, aim_left, show_aim
     global health, score, final_score
     global current_screen
-    global give_power, power_up, power_left, power_right, power_speed
+    global give_power, power_up, power_left, power_right, power_speed, power_name
     global collision
 
     # Gameplay
@@ -210,8 +210,8 @@ def on_draw():
 
     if current_screen == "Menu":
         if write_msg is True:
-            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part1, 210, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 40, 430, arcade.color.RADICAL_RED, 10)
 
         if show_images is True:
             arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT, menu_background)
@@ -295,10 +295,6 @@ def on_draw():
         arcade.draw_text("Press 'm' for menu", 260, 15, arcade.color.BLACK)
 
     if current_screen == "Instructions":
-        if write_msg is True:
-            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
-
         arcade.set_background_color(arcade.color.WHITE)
 
         arcade.draw_text("Instructions", 208, 425, arcade.color.BLACK, 30, italic=True)
