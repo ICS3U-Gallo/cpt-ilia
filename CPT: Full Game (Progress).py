@@ -199,8 +199,8 @@ def on_draw():
 
     if current_screen == "Death":
         if write_msg is True:
-            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part1, 180, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 10, 430, arcade.color.RADICAL_RED, 8)
 
         arcade.draw_text("You Died!!! (Press M to go to menu)", 85, HEIGHT/2, arcade.color.BLACK, 20)
         arcade.set_background_color(arcade.color.RED_DEVIL)
@@ -210,8 +210,8 @@ def on_draw():
 
     if current_screen == "Menu":
         if write_msg is True:
-            arcade.draw_text(msg_part1, 210, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 40, 430, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part1, 180, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 10, 430, arcade.color.RADICAL_RED, 8)
 
         if show_images is True:
             arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT, menu_background)
@@ -234,8 +234,8 @@ def on_draw():
 
     if current_screen == "Play":
         if write_msg is True:
-            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part1, 180, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 10, 430, arcade.color.RADICAL_RED, 8)
 
         # background
         arcade.set_background_color(arcade.color.WHITE)
@@ -281,8 +281,8 @@ def on_draw():
 
     if current_screen == "Highscores":
         if write_msg is True:
-            arcade.draw_text(msg_part1, 190, 450, arcade.color.RADICAL_RED, 10)
-            arcade.draw_text(msg_part2, 50, 430, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part1, 180, 450, arcade.color.RADICAL_RED, 10)
+            arcade.draw_text(msg_part2, 10, 430, arcade.color.RADICAL_RED, 8)
 
         arcade.set_background_color(arcade.color.WHITE)
 
@@ -300,12 +300,28 @@ def on_draw():
         arcade.draw_text("Instructions", 208, 425, arcade.color.BLACK, 30, italic=True)
 
         #Instructions
-        arcade.draw_text("Shortcut Keys:", 45, 360, arcade.color.BLACK, 14)
+        # Shortcut keys
+        arcade.draw_text("Shortcut Keys:", 45, 380, arcade.color.BLACK, 14)
 
-        arcade.draw_text("-'m' takes you to the main menu", 80, 340, arcade.color.BLACK)
-        arcade.draw_text("- 'i' takes you to the instructions screen", 80, 320, arcade.color.BLACK)
-        arcade.draw_text("-'h' takes you to the top  5 highscores during your current session", 80, 300, arcade.color.BLACK)
-        arcade.draw_text("-'p' start playing the game (only works from menu)", 80, 280, arcade.color.BLACK)
+        arcade.draw_text("-'m' takes you to the main menu", 80, 360, arcade.color.BLACK)
+        arcade.draw_text("- 'i' takes you to the instructions screen", 80, 340, arcade.color.BLACK)
+        arcade.draw_text("-'h' takes you to the top  5 highscores during your current session", 80, 320, arcade.color.BLACK)
+        arcade.draw_text("-'p' start playing the game (only works from menu)", 80, 300, arcade.color.BLACK)
+
+        # In-game controls
+        arcade.draw_text("In-Game Controls:", 45, 270, arcade.color.BLACK, 14)
+
+        arcade.draw_text("-Arrow keys to aim", 80, 250, arcade.color.BLACK)
+        arcade.draw_text("-Space to shoot", 80, 230, arcade.color.BLACK)
+
+        # Goal
+        arcade.draw_text("Goal:", 45, 200, arcade.color.BLACK, 14)
+
+        arcade.draw_text("-Get the ball in the net to earn points", 80, 180, arcade.color.BLACK)
+        arcade.draw_text("-A power up will appear every 10 points you get", 80, 160, arcade.color.BLACK)
+        arcade.draw_text("-The power up can be: Health, Slownet, or a Score bonus", 80, 140, arcade.color.BLACK)
+        arcade.draw_text("-The aim of the game is to get a highscore before your lives run out ", 80, 120, arcade.color.BLACK)
+        arcade.draw_text("-You can see you rtop 5 score on the highscores screen", 80, 100, arcade.color.BLACK)
 
         arcade.draw_text("Press 'm' for menu", 250, 15, arcade.color.BLACK)
 
