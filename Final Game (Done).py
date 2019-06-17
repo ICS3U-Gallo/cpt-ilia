@@ -283,7 +283,7 @@ def on_draw():
             if show_images is True:
                 arcade.draw_texture_rectangle(power_up[0], power_up[1], power_up[2]*3, power_up[2]*3, power_img)
 
-        arcade.draw_text(f" Last Power Up: {power_name}", 225 , 40, arcade.color.CHARLESTON_GREEN, 15)
+        arcade.draw_text(f" Last Power Up: {power_name}", 225, 40, arcade.color.CHARLESTON_GREEN, 15)
 
     if current_screen == "Highscores":
         if write_msg is True:
@@ -570,3 +570,4 @@ def death():
 
 if __name__ == '__main__':
     setup()
+    
