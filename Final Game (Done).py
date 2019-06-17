@@ -561,7 +561,6 @@ def death():
     current_screen = "Death"
     final_score = score
     get_highscore(final_score)
-    print(score_list)
     net_reset = True
     ball_reset = True
     power_name = "none"
