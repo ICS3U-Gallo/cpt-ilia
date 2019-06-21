@@ -32,7 +32,7 @@ net_up = False
 net_down = False
 
 try:
-    net_img = arcade.load_texture("Images/net.jpg")
+    net_img = arcade.load_texture("images/net.jpg")
 except FileNotFoundError:
     show_images = False
     write_msg = True
@@ -44,7 +44,7 @@ ball_speed = 15
 ball_reset = False
 
 try:
-    ball_img = arcade.load_texture("Images/basketball.png")
+    ball_img = arcade.load_texture("images/basketball.png")
 except FileNotFoundError:
     show_images = False
     write_msg = True
@@ -70,7 +70,7 @@ power_left = False
 give_power = False
 
 try:
-    power_img = arcade.load_texture("Images/power_up.png")
+    power_img = arcade.load_texture("images/power_up.png")
 except FileNotFoundError:
     show_images = False
     write_msg = True
@@ -90,14 +90,14 @@ current_screen = "Menu"
 
 # Menu Screen Background
 try:
-    menu_background = arcade.load_texture("Images/background.jpg")
+    menu_background = arcade.load_texture("images/background.jpg")
 except FileNotFoundError:
     show_images = False
     write_msg = True
 
 # Instructions and Highscores Scree Background
 try:
-    other_background = arcade.load_texture("Images/background2.jpg")
+    other_background = arcade.load_texture("images/background2.jpg")
 except FileNotFoundError:
     show_images = False
     write_msg = True
